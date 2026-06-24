@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import styles from "./NewsFeed.module.css";
+
 
 const ARTICLE_DATA = [
     {
@@ -88,17 +90,17 @@ function NewsFeed() {
             const allArticles = JSON.parse(localStorage.getItem('blog_articles') || '[]');
             const updatedArticles = allArticles.filter(article => article.id !== articleId);
             
-            // Сохраняем в localStorage 
+            // cохраняем в localStorage 
             localStorage.setItem('blog_articles', JSON.stringify(updatedArticles));
             setArticles(updatedArticles);
         }
     };
 
-    return (
+       return (
         <>
             <h1>Лента свежих новостей</h1>
             {currentUser && (
-                <Link to='/dashboard/create-article'>
+                <Link to='/dashboard/create-article' style={{ display: 'inline-block', marginBottom: '15px' }}>
                     + Создать статью
                 </Link>
             )}
@@ -135,45 +137,46 @@ function NewsFeed() {
                 </div>
             </div>
 
-            <div>
+           
+            <div className={styles.articlesGrid}>
                 {filteredArticles.length > 0 ? (
                     filteredArticles.map((article) => {
-                        //  проверка автора с учетом  регистра 
+                        // проверка автора с учетом регистра 
                         const isAuthor = currentUser && (currentUser.id === article.authorID || currentUser.id === article.authorId);
 
                         return (
-                            <article key={article.id} style={{ marginBottom: '20px', borderBottom: '1px solid #ccc', paddingBottom: '10px' }}>
-                                <span>Автор: {article.authorName}</span>
-                                <h2>{article.title}</h2>
-                                <p>{article.description}</p>
-                                {article.category && <span style={{ marginRight: '10px' }}><b>{article.category.toUpperCase()}</b></span>}
-                                <Link to={`/news/${article.id}`} style={{ marginRight: '10px' }}>
-                                    Читать полностью
-                                </Link>
+                            <article key={article.id} className={styles.articleCard}>
+                                <div>
+                                    {article.category && (
+                                        <span className={styles.categoryBadge}>
+                                            {article.category.toUpperCase()}
+                                        </span>
+                                    )}
+                                    <span className={styles.authorName}>Автор: {article.authorName}</span>
+                                    <h2 className={styles.articleTitle}>{article.title}</h2>
+                                    <p className={styles.articleDesc}>{article.description}</p>
+                                </div>
                                 
-                                {isAuthor && (
-                                    <>
-                                        <Link to={`/dashboard/edit-article/${article.id}`} style={{ marginRight: '10px' }}>
-                                            Редактировать
-                                        </Link>
-                                        {/* Кнопка удаления статьи */}
-                                        <button onClick={() => handleDeleteClick(article.id)} 
-                                        style={{ 
-                                            cursor: 'pointer', 
-                                            background: 'none', 
-                                            border: 'none', 
-                                            fontSize: '16px',
-                                            textDecoration: 'underline', 
-                                            color: 'blue',               
-                                            padding: 0
-                                        }}
-                                            title="Удалить статью"
-                                        >
-                                         Удалить статью
-                                         </button>
-
-                                    </>
-                        )}
+                                <div className={styles.actionsBlock}>
+                                    <Link to={`/news/${article.id}`} className={styles.readLink}>
+                                        Читать полностью
+                                    </Link>
+                                    
+                                    {isAuthor && (
+                                        <>
+                                            <Link to={`/dashboard/edit-article/${article.id}`} className={styles.editLink}>
+                                                Редактировать
+                                            </Link>
+                                            <button 
+                                                onClick={() => handleDeleteClick(article.id)} 
+                                                className={styles.deleteBtn}
+                                                title="Удалить статью"
+                                            >
+                                                Удалить статью
+                                            </button>
+                                        </>
+                                    )}
+                                </div>
                             </article>
                         );
                     })
