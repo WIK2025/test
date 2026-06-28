@@ -8,10 +8,10 @@ function App() {
       {/*  контейнер */}
       <div style={{ display: 'flex', minHeight: '100vh', gap: '20px', padding: '20px' }}>
         
-        {/* Левая панель */}
+        {/* левая панель */}
         <FormPanel />
         
-        {/* Правая панель */}
+        {/* правая панель */}
         <PreviewPanel />
         
       </div>
