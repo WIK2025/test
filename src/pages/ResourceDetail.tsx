@@ -2,6 +2,6 @@
  
  export const ResourceDetail: React.FC = () => {
      return(
-         <div>Бронирование ресурсов</div>
+         <div>ResourceDetail</div>
      );
  };

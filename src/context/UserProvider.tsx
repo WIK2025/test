@@ -1,25 +1,10 @@
-import React, { createContext, useState, ReactNode } from "react";
-
-export interface User {
-    name: string;
-    role: 'Employee' | 'Admin';
-    department: string;
-    monthHoursLimit: number;
-    usedHours: number;
-}
-
-interface UserContextType {
-    user: User;
-    deductHours: (hours: number) => boolean; 
-    refundHours: (hours: number) => void;
-}
-
-export const UserContext = createContext<UserContextType | undefined>(undefined);
+import React, { useState, ReactNode } from "react";
+import { UserContext, User } from './UserContext'; 
 
 
 export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [user, setUser] = useState<User>({
-        name: 'Флексей Иванов',
+        name: 'Алексей Иванов',
         role: 'Employee',
         department: 'PRO',
         monthHoursLimit: 20,
