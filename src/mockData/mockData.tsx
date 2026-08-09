@@ -6,7 +6,6 @@ export interface Resource { // делаем типизацию ресурса
     features: string[]; 
 }
 
-
 export const mockResource: Resource[] = [
     {
         id: '1',
@@ -22,4 +21,12 @@ export const mockResource: Resource[] = [
         floor: 3,
         features: ['Проектор', 'Маркерная доска', 'Флипчарт']
     },
+    
+    ...Array.from({ length: 45 }).map((_, index) => ({
+        id: `generated-${index}`,
+        name: index % 2 === 0 ? `Hot Desk B-${index}` : `Гамма-${index}`,
+        type: index % 2 === 0 ? ('desk' as const) : ('room' as const),
+        floor: (index % 3) + 1,
+        features: index % 3 === 0 ? ['Type-C монитор', 'Флипчарт'] : ['Флипчарт'], 
+    }))
 ];

@@ -2,36 +2,32 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import styles from './Sidebar.module.css';
 
-
 export const Sidebar: React.FC = () => {
     return (
         <aside className={styles.sidebar}>
             <div className={styles.logoContainer}>
                 Workspace Flow
             </div>
-            
             <nav className={styles.navLinks}>
-                <NavLink
+                <NavLink 
                     to='/'
                     className={({ isActive }) => `${styles.link} ${isActive ? styles.activeLink : ''}`} 
                 >
-                    Главная                    
+                    Главная
                 </NavLink>
-                
-                <NavLink
+                <NavLink 
                     to='/booking'
-                    className={({ isActive }) => `${styles.link} ${isActive ? styles.activeLink : ''}`}
+                    className={({ isActive }) => `${styles.link} ${isActive ? styles.activeLink : ''}`} 
                 >
-                    Бронирование                    
+                    Бронирование
                 </NavLink>
-                
-                <NavLink
+                <NavLink 
                     to='/profile'
                     className={({ isActive }) => `${styles.link} ${isActive ? styles.activeLink : ''}`} 
                 >
-                    Профиль                    
+                    Профиль
                 </NavLink>
             </nav>
         </aside>
-    );
-};
+    )
+}
