@@ -1,0 +1,39 @@
+<!-- {%...%} - это часть кода джинджо-->
+ <!-- {{...}} - просто что то вывести -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django</title>
+    <link rel="stylesheet" href="{% static 'css/style.css'%}">
+</head>
+<body>
+
+    <h2>Добавить статью</h2>
+    <form metod="post">
+        <!-- обязательно подключаем токен -->
+        {% csrf_token %}
+        <!-- as_p - выводит в виде параграфа -->
+        {{ form.as_p }}
+        <button type="submit">Опубликовать</button>
+    </form>
+    <h1>Список статей</h1>
+    <!-- обращаемся по ключу к объекту -->
+     <!--end for пишем Обязательно где окончание цикла  -->
+    {% for art in artcles %} 
+       <div class="card">
+            <h2>{{ art.title}}</h2>
+            <p>{{ art.content}}</p>
+
+       </div>
+       <!--  empty - это пустота -->
+       {% empty %}
+       <p>Статей пока нет</p>
+       {% end for%}
+
+
+    
+</body>
+</html>
