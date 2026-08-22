@@ -1,0 +1,7 @@
+fastapi
+pydantic[email]
+pydantic-settings
+sqlalchemy
+aiosqlite
+uvicorn[standard]
+watchfiles
