@@ -1,0 +1,18 @@
+{% extends 'post/base.html'%}
+{% block title %} {{ page_title }} {% endblock %}
+{% block content %}
+
+<div>
+    <a href="{% url 'post:post_list'% }"><--Назад к списку
+    </a>
+</div>
+<article>
+    <h1>{{} post.title}</h1>
+    <div>
+        {{ post.created_at|date:"d.m.Y H:i" }}
+    </div>
+    <div>
+        {{ post.content }}
+    </div>
+</article>
+{% endblock %}
