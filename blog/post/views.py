@@ -43,4 +43,68 @@ def post_detail(request, post_id):
     }
     return render(request, 'post/post_details.html', context)
 
+@login_required
+
+def create_post(request):
+    if request.method == 'POST':
+        form = PostCreateForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)   
+            post.author = request.user
+            post.save()
+            messages.success(request,'Пост СОЗДАН')
+            return redirect(request, 'post/post_details', post_id=post.id)
+        else:
+            messages.error(request, 'Ошибка в форме')
+    else:
+            form - PostCreateForm()
+            context = {
+                'form':form,
+                'page_title': 'Создание нового поста',
+        }
+            return render(request, 'post/post_скуфеу.html', context)   
+@login_required
+def edit_post(request, post_id):
+    post = get_object_or_404(Post, pk=post_id, author=request.user)
+    if request.method == 'POST':
+        # instance - передача значение свойств объекта
+        form = PostCreateForm(request.POST, instance=post) # привязываем объект, связь с объектом
+        if form.is_valid()
+            form.save()
+                messages.success(request, 'Пост обновлен')
+                return redirect('post:post_detail', post_id=post.id)
+           else: 
+            messages.error(request, 'Ошибка в форме')
+        else:
+            form = PostCreateForm(instance=post)
+            context = {
+            'form': form,
+            'post':post
+            'page_title': f'Редактирование {post.title}'
+            }
+        return render(request, 'post/post_edit.html', context)
+
+@login_required
+def delete_post(request, post_id):  
+        post = get_object_or_404(Post, pk=post_id, author=request.user)
+        if request.method == 'POST':
+            if 'confirm_delete' in request.POST:
+                post.delete()
+                messages.success(request, 'Пост удален')
+                return redirect('post:post_lists')
+            else:
+                return redirect('post:post_detail', post_id=post.id)
+        comments = post.comments.all().order_by('-created_at')
+        form = CommentForm()
+        context = {
+            'post': post,
+            'comments': comments,
+            'form': form,
+            'delete_confirm': True, #флаг для отображения кнопки подтверждения
+            'page_title': f'Удаление {post.title}',
+        }
+        return render(request, 'post/post_detail.html', context)
+                
+       
+
 
