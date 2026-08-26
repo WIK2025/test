@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Мой блог{% eтdblock %}</title>
+    <title>{% block title %}Мой блог{% endblock %}</title>
 </head>
 <body>
     <header>
@@ -11,7 +11,19 @@
             <a href="{% url 'post:post_lost'%}">Мой блог</a>
         </h1>
         <nav>
+            {% if user.is_authenticated%} {% endif %}
+            <span>{{ user.name }}</span>
+            <a href="{% url 'post:create_post'%}">
+                Создать пост
+            </a>
+            {% endif %}
+            <a href="{% url post:create_post %}">Войти</a>
+
             <a href="/admin/" target="_blank">Админка</a>
+            <a href="{% url post:create_post %}">Войти</a>
+
+            <a href="{% url 'login' %}">Войти</a>
+
         </nav>
     </header>
     <main>

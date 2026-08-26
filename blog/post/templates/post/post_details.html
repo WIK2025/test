@@ -8,11 +8,50 @@
 </div>
 <article>
     <h1>{{} post.title}</h1>
+    <span>{{ post. author }}</span>
     <div>
+        
         {{ post.created_at|date:"d.m.Y H:i" }}
     </div>
     <div>
         {{ post.content }}
     </div>
+    {% if user == post.author %}
+     <a href="{%url'post:edit_post' post.id%}">Редактирорвать</a>
+     <a href="{% url'post:delete_post' post.id %}">Удалить</a>
+     {% endif %}
+
+      {% if delete_confirm %}
+        <div>
+            <p>Вы действительно хотите удалить пост?</p>
+            <form method="post" action="{ % url 'post:delete_post' post.id%}">
+                 {% csrf_token %}
+                 <button type="submit">Да,удалить</button>
+                 <a href="{% url 'post:post_detail' post.id%}">Отмена</a>
+
+            </form>
+        </div>
+      
+      {% endif %}
+    
 </article>
+
+<section>
+    <h2>Комментарии({{ comments.count }})</h2>
+    {% if user.is_authenticated %} 
+        <h3>Добавить комментарий</h3>
+        <form method="post">
+             {% csrf_token %}
+             {{ form.text }}
+             <button type="submit">Оправить</button>
+        </form>
+    <div>
+         {% if comments %}
+             {% for comment in comments %}
+                {{ comments.create_at}} {{ comment.author }}
+                <p>{{ comment.text }}</p>
+            {% endfor %}
+        {% endif %}
+    </div>
+</section>
 {% endblock %}
