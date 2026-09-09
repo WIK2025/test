@@ -1,0 +1,43 @@
+{% extends 'post/base.html' %}
+{% block title %} {{ page_title }} {% endblock %}
+
+{% block content %} 
+<div>
+    <div>
+        {% if profile.avatar %}
+            <img src="{{ profile.avatar.url }}" alt="Аватар" style="max-width: 150px; border-radius: 50%;">
+        {% else %} 
+            <div style="width: 100px; height: 100px; background: #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                😎
+            </div>
+        {% endif %} 
+    </div>
+
+    <h1>{{ user.username }}</h1>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    
+    {% if profile.is_moderator %}
+        <div style="color: #2c3e50; font-weight: bold;">🛡️ Модератор</div>
+    {% endif %} 
+
+    <div style="margin-top: 15px;">
+        {% if profile.bio %} 
+            <div>{{ profile.bio }}</div>
+        {% else %} 
+            <p style="color: gray; font-style: italic;">Расскажите о себе...</p>
+        {% endif %} 
+    </div>
+
+    <div style="margin-top: 15px; display: flex; gap: 15px;">
+        <div><strong>{{ user.posts.count }}</strong> Постов</div>
+        <div><strong>{{ user.comments.count }}</strong> Комментариев</div>
+    </div>
+    
+    <div style="margin-top: 20px;">
+       
+        <a href="{% url 'userProfile:profile_edit' %}" style="display: inline-block; background: #3498db; color: white; padding: 8px 15px; text-decoration: none; border-radius: 4px;">
+            Редактировать профиль
+        </a>
+    </div>
+</div>
+{% endblock %}

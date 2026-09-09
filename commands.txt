@@ -1,0 +1,136 @@
+https://github.com/WIK2025/test
+делаем папку безопасной
+git config --global --add safe.directory D:/DJANGO/blog-django-PHY52-main/blog-django-PHY52-main
+git checkout -b BLOG_on_Django - создаем ветку
+git remote add origin https://github.com/WIK2025/test Привязываем  репозиторий
+git add . - добавляем файлы
+django-admin startproject blog
+
+cd blog
+python manage.py startapp post 
+python manage.py startapp userAcc
+python manage.py startapp userProfile 
+
+python manage.py runserver
+python manage.py createsuperuser
+
+git init
+pip freeze > requirements.txt
+git add .
+git commit -m "chore: Initial project"
+git branch -M main
+git remote add origin <урл репо>
+git push -u origin main 
+
+
+git checkout -b develop
+git push origin develop
+
+git checkout -b feature/blog-basic
+
+git add .
+git commit -m "feat: add Post model"
+
+python manage.py makemigrations
+git add .
+git commit -m "feat: create migrations Post model"
+
+
+python manage.py migrate 
+python manage.py createsuperuser 
+python manage.py runserver
+http://127.0.0.1:8000/admin 
+ctrl C
+
+python manage.py runserver
+python manage.py makemigrations
+
+git add .
+git commit -m "feat: register Post in admin panel"
+
+git add .
+git commit -m "feat: add post_list and post_details views"
+
+git add .
+git commit -m "feat: configure urls for post app"
+
+
+
+git add .
+git commit -m "feat: add templates for post(base,list, detail)"
+
+git push -u origin feature/blog-basic
+
+
+
+
+git checkout -b feature/auth-comments
+git add .
+git commit -m "feat: add auth field to Post model and create Comment model"
+git push -u origin feature/auth-comments
+
+
+
+
+git add .
+git commit -m "feat: create migrations for author and comments"
+
+
+
+git add .
+git commit -m "feat: add author and Comment model in admin panel"
+
+git add .
+git commit -m "feat: add PostCreate form and Comment form"
+
+git add .
+git commit -m "feat: add post_detail view with comment form"
+
+
+git add .
+git commit -m "feat: create, edit, delete post views"
+git add .
+git commit -m "feat: add create, edit, delete post urls"
+
+git add .
+git commit -m "feat: add login/logout urls and settings"
+
+git add .
+git commit -m "feat: add login, create/edit post templates"
+git push origin feature/auth-comments
+python manage.py migrate
+python manage.py runserver
+
+
+git add .
+git commit -m "fix: logout and delete views"
+git push origin feature/auth-comments
+(на гитхаб создаем pr и мерджим ветку в develop)
+git checkout develop
+git pull origin develop
+git checkout -b feature/registration
+
+git add .
+git commit -m "feat: add register form"
+
+
+git add userAcc/views.py 
+git commit -m "feat: add register view with messages"
+
+git add userAcc/urls.py blog/urls.py 
+git commit -m "feat: configure registration urls"
+
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
+
+git add .
+git commit -m "feat: add template for registeration"
+git push origin feature/registration
+(на гитхаб создаем pr и мерджим ветку в develop)
+git checkout develop
+git pull origin develop
+
+
+git add .
+git commit -m "feat: add moderator checking"

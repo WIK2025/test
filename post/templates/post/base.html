@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} Мой блог {% endblock %}</title>
+</head> 
+<body>
+    <header>
+        <h1>
+            <a href="{% url 'post:post_list' %}">Мой блог</a>
+        </h1>
+        <nav>
+            {% if user.is_authenticated %} 
+                <a href="{% url 'userProfile:profile' %}">{{ user.username }}</a>
+                <a href="{% url 'post:create_post' %}">
+                    Создать пост
+                </a>
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit">Выйти</button>
+                </form>
+            {% else %}    
+                <a href="{% url 'login' %}">Войти</a>
+                <a href="{% url 'userAcc:register' %}">
+                    Регистрация
+                </a>
+            {% endif %}
+            <a href="/admin/" target="_blank">Админка</a>
+        </nav>
+    </header>
+
+    <main>
+        {% if messages %}
+            <div>
+                {% for message in messages %} 
+                <div>{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+        <div>&copy; 2026 Мой блог</div>
+    </footer>
+</body>
+</html>
+
+<!-- # git commit -m "feat: add profile link in base template " -->

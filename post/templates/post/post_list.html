@@ -1,0 +1,36 @@
+{% extends 'post/base.html' %}
+{% block title %} {{ page_title }} {% endblock %}
+
+{% block content %}
+    <h1>Все посты блога</h1>
+    {% if posts %}
+        {% for post in posts %}
+            <article>
+                <h2>
+                    <a href="{% url 'post:post_detail' post.id %}">
+                        {{ post.title }}
+                    </a>
+                </h2>
+                <div>
+                    
+                    {% if post.author %}
+                        {% if user.is_authenticated and user.profile.is_moderator %}
+                            <a href="{% url 'userProfile:user_profile_view' post.author.id %}">{{ post.author.username }}</a>
+                        {% else %}
+                            {{ post.author.username }}
+                        {% endif %}
+                    {% else %}
+                        Анонимный автор
+                    {% endif %}
+                    
+                    | {{ post.created_at|date:"d.m.Y H:i" }}
+                </div>
+                <div>
+                    {{ post.content|truncatewords:20|linebreaks }}
+                </div>
+            </article>
+        {% endfor %}
+    {% else %}
+        <div>Пока нет ни одного поста</div>
+    {% endif %}
+{% endblock %}

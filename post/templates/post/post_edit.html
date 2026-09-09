@@ -1,0 +1,10 @@
+{% extends 'post/base.html' %}
+{% block title %} {{ page_title }} {% endblock %}
+{% block content %}
+    <h1>Редактирование {{ post.title }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit">Сохранить</button>
+    </form>
+{% endblock %}

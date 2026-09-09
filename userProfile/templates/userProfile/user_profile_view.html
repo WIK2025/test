@@ -1,0 +1,57 @@
+{% extends 'post/base.html' %}
+{% block title %} {{ page_title }} {% endblock %}
+{% block content %} 
+
+{% block content %}
+<a href="{% url 'userProfile: profile' %}">Мой профиль</a>
+<div>
+    <div>
+        {% if profile.avatar%}
+        <img src="{{profile.avatar.url}}">
+        {% else%} 
+            <div>какой то аватар вставить</div>
+        {% endif %} 
+    </div>
+
+    <h1>{{ view_user.username}}</h1>
+     <h1>{{ view_user.email}}</h1>
+      {% if profile.is_moderator%}
+        <div>(эмодзи вставить) Модератор</div>
+
+      {% endif %} 
+      {% if profile_blocked%}
+      <p>какой то эмодзи ,Заблокирован
+      {% if profile.blocked_until %}
+      до {{profile.blocked_until|date:"d.m.Y H:i" }}
+      {% else %} 
+      Навсегда
+     {% endif %} 
+    </p>
+    {% else %} 
+     <p>какой то эмодзи ,Активен</p>
+      {% endif %} 
+      <div>
+        {% if profile.bio %} 
+        <div>{{ profile.bio}}</div>
+        {% else %} 
+            <p>Информация Отсутствует</p>
+        {% endif %} 
+      </div>
+
+      <div>
+        <div>{{ view_user.posts.count}} Постов</div>
+        <div>{{ view_user.comments.count}} Комментариев</div>
+    </div>
+    <div>
+        <a href="{% url 'userProfile: toggle_block_user' view_user.id%}">
+            {% if profile.is_blocked %}
+            разблокировать
+             {% else %} 
+            Заблокировать
+            {% endif %} 
+
+           </a>
+    
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'post/base.html' %}
+{% block title %} {{ page_title }} {% endblock %}
+{% block content %}
+    <h1>Создание поста</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit">Опубликовать</button>
+    </form>
+{% endblock %}

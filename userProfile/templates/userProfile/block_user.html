@@ -1,0 +1,40 @@
+{% extends 'post/base.html' %}
+{% block title %} {{ page_title }} {% endblock %}
+{% block content %} 
+
+{% block content %}
+
+    <a href="{% url 'userProfile:user_profile_view' block_user.id%}">Назад в профиль</a>
+
+    <h1>{{ if profile.is_blocked}}
+        Разблокировать пользователя
+         {% else %} 
+      Зваблокировать пользователя
+     {% endif %} 
+    </h1>
+
+    <form metod="post">
+
+        { % csrf_token% }
+        {% if not profile.is_blocked %} 
+        <div>
+            <label for="days">Срок блокировки</label>
+            <select id="days" name="days">
+                <option value="1">1 день</option>
+                <option value="3">3 дня</option>
+                <option value="7" selected>7 дней</option>
+                <option value="30">30 дней</option>
+                <option value="0">Навсегда</option>
+            </select>
+            
+
+        </div>
+            <button type="submit" name="action" value="block">Заблокировать</button>
+        {% else %} 
+            <button type="submit" name="action" value="unblock">Разблокировать</button>
+        {% endif %} 
+    </form>
+
+    
+
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends 'post/base.html' %}
+{% block title %} {{ page_title }} {% endblock %}
+
+{% block content %}
+    <div>
+        <a href="{% url 'post:post_list' %}">
+            <--- Назад к списку
+        </a>
+    </div>
+
+    <article>
+        <h1>{{ post.title }}</h1>
+        <span>{{ post.author.username }}</span>
+        <div>
+             {{ post.created_at|date:"d.m.Y H:i" }}
+        </div>
+        <div>
+            {{ post.content|linebreaks }}
+        </div>
+               
+        {# Проверяем, является ли текущий юзер автором или модератором #}
+        {% if user.is_authenticated %}
+            {% if post.author == user or user.profile.is_moderator %}
+                <a href="{% url 'post:edit_post' post.id %}">
+                    Редактировать
+                </a>
+                
+                <a href="{% url 'post:delete_post' post.id %}">
+                    Удалить
+                </a> 
+            {% endif %}
+        {% endif %}
+
+
+        {% if delete_confirm %}
+           <div>
+                <p>Вы действительно хотите удалить пост?</p>
+                <form method="post" action="{% url 'post:delete_post' post.id %}">
+                    {% csrf_token %}
+                    <button type="submit" name="confirm_delete">Да, удалить</button>
+                    <a href="{% url 'post:post_detail' post.id %}">Отмена</a>
+                </form>
+           </div> 
+        {% endif %}
+    </article>
+
+    <section>
+        <h2>Комментарии ({{ comments.count }})</h2>
+        {% if user.is_authenticated %}
+            <h3>Добавить комментарий</h3>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.text }}
+                <button type="submit">Отправить</button>
+            </form>
+        {% endif %}
+        <div>
+            {% if comments %}
+                {% for comment in comments %}
+                    <div style="margin-top: 10px;">
+                        <strong>{{ comment.author.username }}</strong> 
+                        <small>({{ comment.created_at|date:"d.m.Y H:i" }})</small>
+                                                
+                        {# комментарий может удалить его автор, автор поста или модератор #}
+                        {% if user.is_authenticated %}
+                            {% if comment.author == user or post.author == user or user.profile.is_moderator %}  
+                                <a href="{% url 'post:delete_comment' comment.id %}" style="color: red; margin-left: 10px;">
+                                    Удалить комментарий
+                                </a>
+                            {% endif %}
+                        {% endif %}
+
+                        <p>{{ comment.text }}</p>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'post/base.html' %}
+{% block title %} {{ page_title }} {% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 20px;">
+    
+    <a href="{% url 'userProfile:profile' %}">&lt;--- Назад в профиль</a>
+</div>
+
+<div>
+    <h1>Редактирование профиля</h1>
+    
+    
+    <form method="post" enctype="multipart/form-data" style="max-width: 500px;">
+        {% csrf_token %}
+        
+        <div style="margin-bottom: 15px;">
+            <h3>Данные аккаунта</h3>
+            {{ u_form.as_p }}
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <h3>Личные данные</h3>
+            {{ p_form.as_p }}
+        </div>
+
+        <button type="submit" style="background: #2ecc71; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">
+            Сохранить изменения
+        </button>
+    </form>
+</div>
+{% endblock %}
+
+
+
+<!-- # git commit -m "feat: add profile templates " -->
