@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Публичная доска объявлений</title>
+    <style>
+        body { font-family: sans-serif; max-width: 700px; margin: 0 auto; padding: 20px; color: #333; }
+        .form-section { background: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 30px; }
+        .form-section h2 { margin-top: 0; }
+        .notice-card { border-bottom: 1px solid #eee; padding: 15px 0; }
+        .notice-card h3 { margin: 0 0 5px 0; }
+        .meta-info { font-size: 0.85em; color: #666; }
+        form p { margin-bottom: 15px; }
+        input[type="text"], textarea { width: 100%; padding: 8px; box-sizing: border-box; }
+        button { background: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+
+    <h1>📋 Публичная доска объявлений</h1>
+
+    <!-- добавление нового объявления -->
+    <div class="form-section">
+        <h2>Добавить новое объявление</h2>
+        <form method="post" action="{% url 'board:index' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Опубликовать</button>
+        </form>
+    </div>
+
+    <!-- список всех объявлений -->
+    <h2>Свежие объявления</h2>
+    {% if notices %}
+        {% for notice in notices %}
+            <div class="notice-card">
+                <!-- ссылка на страницу объявления -->
+                <h3><a href="{% url 'board:notice_detail' notice.pk %}">{{ notice.title }}</a></h3>
+                
+                <div class="meta-info">
+                    Автор: <strong>{{ notice.author_name }}</strong> | Опубликовано: {{ notice.created_at|date:"d.m.Y H:i" }}
+                    
+                    <!-- кнопка для удаления объявления -->
+                    <form method="post" action="{% url 'board:delete_notice' notice.pk %}" style="display:inline; margin-left: 15px;">
+                        {% csrf_token %}
+                        <button type="submit" style="background: #ef4444; color: white; padding: 3px 8px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8em;">Удалить</button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Объявлений пока нет. Станьте первым!</p>
+    {% endif %}
+
+</body>
+</html>
