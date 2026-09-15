@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ notice.title }} — Объявление</title>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #333; line-height: 1.6; }
+        .notice-header { border-bottom: 2px solid #007bff; padding-bottom: 10px; margin-bottom: 20px; }
+        .meta-info { font-size: 0.9em; color: #666; margin-top: 5px; }
+        .content-body { background: #fff; padding: 10px 0; font-size: 1.1em; white-space: pre-wrap; }
+        .back-link { display: inline-block; margin-top: 30px; color: #007bff; text-decoration: none; font-weight: bold; }
+        .back-link:hover { text-decoration: underline; }
+        .actions-panel { margin-top: 25px; display: flex; gap: 10px; border-top: 1px solid #eee; padding-top: 15px; }
+        .btn-edit { background: #f59e0b; color: white; padding: 8px 15px; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 0.9em; display: inline-block; }
+        .btn-edit:hover { background: #d97706; }
+        .btn-delete { background: #ef4444; color: white; padding: 8px 15px; border: none; border-radius: 4px; font-weight: bold; font-size: 0.9em; cursor: pointer; }
+        .btn-delete:hover { background: #dc2626; }
+    </style>
+</head>
+<body>
+
+    <div class="notice-header">
+        <h1>{{ notice.title }}</h1>
+        <div class="meta-info">
+            Автор: <strong>{{ notice.author.username }}</strong> | Дата публикации: {{ notice.created_at|date:"d.m.Y H:i" }}
+        </div>
+    </div>
+
+    <!-- вывод текста объявления с переносом строк -->
+    <div class="content-body">
+        {{ notice.content }}
+    </div>
+
+    <!-- редактировать, только автор -->
+    {% if user.is_authenticated and user == notice.author %}
+        <div class="actions-panel">
+            
+            <a href="{% url 'board:edit_notice' notice.pk %}" class="btn-edit">Редактировать</a>
+            
+            <!-- удаление объявления -->
+            <form method="post" action="{% url 'board:delete_notice' notice.pk %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn-delete">Удалить объявление</button>
+            </form>
+        </div>
+    {% endif %}
+
+    <!-- назад к списку -->
+    <a href="{% url 'board:index' %}" class="back-link">← Назад к списку</a>
+
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Вход на сайт</title>
+    <style>
+        body { font-family: sans-serif; max-width: 450px; margin: 60px auto; padding: 20px; color: #333; line-height: 1.6; }
+        .form-section { background: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid #ddd; }
+        form p { margin-bottom: 15px; }
+        input[type="text"], input[type="password"] { width: 100%; padding: 8px; box-sizing: border-box; margin-top: 5px; }
+        button { background: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; }
+        button:hover { background: #0056b3; }
+        .links { display: flex; justify-content: space-between; margin-top: 15px; font-size: 0.9em; }
+        .links a { color: #007bff; text-decoration: none; }
+        .links a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <h2 style="text-align: center;">🔐 Вход в личный кабинет</h2>
+    
+    <div class="form-section">
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Войти</button>
+        </form>
+        
+        <div class="links">
+            <a href="{% url 'board:register' %}">Зарегистрироваться</a>
+            <a href="{% url 'board:index' %}" style="color: #666;">На главную</a>
+        </div>
+    </div>
+
+</body>
+</html>

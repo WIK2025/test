@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация аккаунта</title>
+    <style>
+        body { font-family: sans-serif; max-width: 500px; margin: 40px auto; padding: 20px; color: #333; line-height: 1.6; }
+        .form-section { background: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid #ddd; }
+        form p { margin-bottom: 15px; }
+        input[type="text"], input[type="password"], input[type="email"] { width: 100%; padding: 8px; box-sizing: border-box; margin-top: 5px; }
+        button { background: #10b981; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #059669; }
+        .login-link { margin-left: 15px; color: #007bff; text-decoration: none; font-weight: bold; }
+        .login-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <h2>👤 Регистрация нового профиля</h2>
+    
+    <div class="form-section">
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Создать аккаунт</button>
+            <a href="{% url 'board:index' %}" class="login-link" style="color: #666;">Отмена</a>
+        </form>
+    </div>
+
+</body>
+</html>
