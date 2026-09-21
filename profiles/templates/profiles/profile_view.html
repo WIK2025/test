@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ page_title }}</title>
+    <style>
+        body { font-family: sans-serif; max-width: 700px; margin: 0 auto; padding: 20px; color: #333; line-height: 1.6; }
+        .profile-card { background: #f9f9f9; padding: 24px; border-radius: 12px; border: 1px solid #e5e7eb; margin-bottom: 30px; }
+        .profile-header h2 { margin: 0; color: #111827; }
+        .profile-details { margin-top: 15px; }
+        .profile-details p { margin: 6px 0; font-size: 0.95em; }
+        .btn-edit { display: inline-block; background: #3498db; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 15px; transition: 0.2s; }
+        .btn-edit:hover { background: #2980b9; }
+        .notice-item { border-bottom: 1px solid #eee; padding: 12px 0; }
+        .notice-item h4 { margin: 0 0 5px 0; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #666; text-decoration: none; font-weight: bold; }
+        .alert-success { background: #dcfce7; color: #166534; padding: 12px; border-radius: 6px; margin-bottom: 20px; font-size: 0.9em; font-weight: 500; }
+    </style>
+</head>
+<body>
+
+    <a href="{% url 'board:index' %}" class="back-link">← На главную ленту доски</a>
+
+    <!-- Вывод  сообщений при обновлении -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert-success">✓ {{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="profile-card">
+        <div class="profile-header">
+            <h2>👤 Личный кабинет пользователя: {{ user.username }}</h2>
+        </div>
+        <div class="profile-details">
+            <p><strong>Электронная почта:</strong> {{ user.email|default:"Не указана" }}</p>
+            <p><strong>Номер телефона:</strong> {{ user.profile.phone|default:"Не указан" }}</p>
+            <p><strong>Дата рождения:</strong> {{ user.profile.birth_date|date:"d.m.Y"|default:"Не указана" }}</p>
+            <div style="margin-top: 15px; border-top: 1px solid #e5e7eb; padding-top: 10px;">
+                <p><strong>О себе:</strong></p>
+                <p style="color: #4b5563; font-style: italic;">{{ user.profile.bio|default:"Биография пока не заполнена" }}</p>
+            </div>
+        </div>
+        <a href="{% url 'profiles:profile_edit' %}" class="btn-edit">Редактировать профиль</a>
+    </div>
+
+    <h3>📝 Мои опубликованные объявления ({{ notices.count }})</h3>
+    {% if notices %}
+        {% for notice in notices %}
+            <div class="notice-item">
+                <h4><a href="{% url 'board:notice_detail' notice.pk %}">{{ notice.title }}</a></h4>
+                <small style="color: #9ca3af;">Дата публикации: {{ notice.created_at|date:"d.m.Y H:i" }}</small>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p style="color: #6b7280; font-style: italic;">Вы еще не опубликовали ни одного объявления на доске.</p>
+    {% endif %}
+
+</body>
+</html>

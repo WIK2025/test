@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ page_title }}</title>
+    <style>
+        body { font-family: sans-serif; max-width: 550px; margin: 40px auto; padding: 20px; color: #333; }
+        .form-box { background: #f9f9f9; padding: 24px; border-radius: 10px; border: 1px solid #ddd; }
+        form p { margin-bottom: 15px; }
+        input[type="text"], input[type="tel"], input[type="date"], textarea { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 6px; font-family: inherit; }
+        textarea { resize: vertical; }
+        .btn-save { background: #10b981; color: white; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; font-size: 1em; transition: 0.2s; }
+        .btn-save:hover { background: #059669; }
+        .cancel-link { display: block; text-align: center; margin-top: 15px; color: #6b7280; text-decoration: none; font-size: 0.9em; }
+        .cancel-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <h2>✏️ Редактирование личных данных</h2>
+    
+    <div class="form-box">
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn-save">Сохранить изменения</button>
+        </form>
+        <a href="{% url 'profiles:profile_view' %}" class="cancel-link">Отмена и возврат</a>
+    </div>
+
+</body>
+</html>

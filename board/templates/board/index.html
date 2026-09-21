@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Публичная доска объявлений</title>
+    <style>
+        /* Базовые стили отображения интерфейса доски */
+        body { font-family: sans-serif; max-width: 700px; margin: 0 auto; padding: 20px; color: #333; }
+        header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ddd; padding-bottom: 15px; margin-bottom: 25px; }
+        .auth-status { font-size: 0.9em; }
+        .auth-status button { background: none; border: none; color: #007bff; font-weight: bold; cursor: pointer; padding: 0; font-family: inherit; font-size: 1em; }
+        .auth-status a { color: #007bff; text-decoration: none; margin-left: 5px; font-weight: bold; }
+        .form-section { background: #f9f9f9; padding: 20px; border-radius: 8px; border: 1px solid #ddd; margin-bottom: 30px; }
+        .form-section h2 { margin-top: 0; }
+        .notice-card { border-bottom: 1px solid #eee; padding: 15px 0; }
+        .notice-card h3 { margin: 0 0 5px 0; }
+        .meta-info { font-size: 0.85em; color: #666; }
+        form p { margin-bottom: 15px; }
+        input[type="text"], textarea { width: 100%; padding: 8px; box-sizing: border-box; }
+        .btn-submit { background: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-submit:hover { background: #0056b3; }
+        .alert-msg { background: #e0f2fe; color: #0369a1; padding: 10px; border-radius: 5px; margin-bottom: 15px; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+
+    <!-- Файл: public_bulletin_board/board/templates/board/index.html -->
+
+    <header>
+        <h1>📋 Публичная доска объявлений</h1>
+        <div class="auth-status">
+            {% if user.is_authenticated %}
+                <!-- ИСПРАВЛЕНО: имя пользователя превращено в кликабельную ссылку на личный кабинет по ТЗ -->
+                Привет, <strong><a href="{% url 'profiles:profile_view' %}" style="margin-left: 0; color: #10b981;">{{ user.username }}</a></strong>!
+                <!-- ИСПРАВЛЕНО: Убран префикс board: у глобального logout -->
+                <form method="post" action="{% url 'logout' %}" style="display: inline; margin-left: 10px;">
+                    {% csrf_token %}
+                    <button type="submit">[Выйти]</button>
+                </form>
+            {% else %}
+                <!-- ИСПРАВЛЕНО: login вызывается глобально, а register — через пространство имен board: -->
+                <a href="{% url 'login' %}">[Войти]</a> | 
+                <a href="{% url 'board:register' %}">[Зарегистрироваться]</a>
+            {% endif %}
+        </div>
+    </header>
+
+
+    <!-- Вывод всплывающих системных уведомлений о публикации или удалении записей -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert-msg">✓ {{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Блок добавления нового объявления (доступен только для вошедших пользователей) -->
+    <div class="form-section">
+        <h2>Добавить новое объявление</h2>
+        {% if user.is_authenticated %}
+            <form method="post" action="{% url 'board:index' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn-submit">Опубликовать</button>
+            </form>
+        {% else %}
+            <p style="color: #6b7280; font-style: italic;">Чтобы опубликовать своё объявление, пожалуйста, <a href="{% url 'login' %}">войдите на сайт</a>.</p>
+        {% endif %}
+    </div>
+
+    <!-- список всех объявлений -->
+    <h2>Свежие объявления</h2>
+    {% if notices %}
+        {% for notice in notices %}
+            <div class="notice-card">
+                <!-- ссылка на страницу объявления -->
+                <h3><a href="{% url 'board:notice_detail' notice.pk %}">{{ notice.title }}</a></h3>
+                
+                <div class="meta-info">
+                    <!-- ИСПРАВЛЕНО: Заменили сломанное notice.author_name на чтение из реляционной связи notice.author.username -->
+                    Автор: <strong>{{ notice.author.username }}</strong> | Опубликовано: {{ notice.created_at|date:"d.m.Y H:i" }}
+                    
+                    <!-- ИСПРАВЛЕНО: Защитили кнопку. Удалять объявления теперь может ТОЛЬКО его непосредственный автор -->
+                    {% if user.is_authenticated and user == notice.author %}
+                        <!-- кнопка для удаления объявления -->
+                        <form method="post" action="{% url 'board:delete_notice' notice.pk %}" style="display:inline; margin-left: 15px;">
+                            {% csrf_token %}
+                            <button type="submit" style="background: #ef4444; color: white; padding: 3px 8px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.8em;">Удалить</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Объявлений пока нет. Станьте первым!</p>
+    {% endif %}
+
+</body>
+</html>

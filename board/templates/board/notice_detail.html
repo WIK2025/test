@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ notice.title }} — Объявление</title>
+    <style>
+        /* Стили для аккуратного отображения карточки объявления */
+        body { font-family: sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; color: #333; line-height: 1.6; }
+        .notice-container { background: #ffffff; padding: 30px; border-radius: 10px; border: 1px solid #e5e7eb; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .notice-title { margin-top: 0; color: #111827; font-size: 1.8em; }
+        .notice-meta { font-size: 0.85em; color: #6b7280; border-bottom: 2px solid #e5e7eb; padding-bottom: 10px; margin-bottom: 20px; }
+        .notice-content { font-size: 1.1em; color: #374151; margin-bottom: 30px; white-space: pre-wrap; }
+        /* Стили для панели кнопок управления */
+        .actions-panel { display: flex; gap: 15px; align-items: center; border-top: 1px solid #eee; padding-top: 20px; margin-bottom: 20px; }
+        .btn-edit { background: #3498db; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 0.95em; transition: background 0.2s; }
+        .btn-edit:hover { background: #2980b9; }
+        .btn-delete { background: #ef4444; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.95em; transition: background 0.2s; }
+        .btn-delete:hover { background: #dc2626; }
+        .back-link { display: inline-block; color: #4b5563; text-decoration: none; font-weight: bold; }
+        .back-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <div class="notice-container">
+        <!-- Выводим заголовок текущего объявления -->
+        <h2 class="notice-title">{{ notice.title }}</h2>
+        
+        <!-- Выводим мета-информацию: имя автора и дату публикации -->
+        <div class="notice-meta">
+            Автор: <strong>{{ notice.author_name }}</strong> | Опубликовано: {{ notice.created_at|date:"d.m.Y H:i" }}
+        </div>
+
+        <!-- Выводим сам текст объявления -->
+        <div class="notice-content">
+            {{ notice.content }}
+        </div>
+
+        <!-- БЛОК ПРОВЕРКИ ПРАВ: Показываем панель управления только автору этого объявления -->
+        {% if user.is_authenticated and user.username == notice.author_name %}
+            <div class="actions-panel">
+                <!-- Кнопка перехода на страницу редактирования объявления -->
+                <a href="{% url 'board:edit_notice' notice.pk %}" class="btn-edit">Редактировать объявление</a>
+
+                <!-- Кнопка безопасного удаления объявления через POST-запрос -->
+                <form method="post" action="{% url 'board:delete_notice' notice.pk %}" style="display: inline; margin: 0;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-delete" onclick="return confirm('Вы уверены, что хотите навсегда удалить это объявление?');">Удалить</button>
+                </form>
+            </div>
+        {% endif %}
+
+        <a href="{% url 'board:index' %}" class="back-link">← Назад к списку</a>
+    </div>
+
+</body>
+</html>
