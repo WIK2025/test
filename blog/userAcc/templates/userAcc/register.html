@@ -1,0 +1,24 @@
+{% extends 'post/base.html' %}
+{% block title %} {{ page_title }} {% endblock %}
+
+{% block content %}
+    <h1>Регистрация нового аккаунта</h1>
+    
+    <!-- Форма отправляет данные методом POST на тот же URL -->
+    <form method="post" novalidate>
+        <!-- Железная защита Django от подделки запросов (CSRF) -->
+        {% csrf_token %}
+        
+        <!-- Автоматический вывод полей формы (username, email, password1, password2) -->
+        {{ form }}
+        
+        <!-- Кнопка для отправки данных на сервер -->
+        <button type="submit" >
+            Зарегистрироваться
+        </button>
+    </form>
+
+    <p>
+        Уже есть аккаунт? <a href="{% url 'login' %}">Войти </a>
+    </p>
+{% endblock %}

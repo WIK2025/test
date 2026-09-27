@@ -1,0 +1,79 @@
+{% extends 'post/base.html' %}
+{% block title %} {{ page_title }} {% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 20px;">
+    
+    <a href="{% url 'post:post_list' %}" style="text-decoration: none; color: #3b82f6; font-weight: bold;">
+        ← Назад к списку
+    </a>
+</div>
+
+<article style="background: #ffffff; padding: 25px; border-radius: 8px; border: 1px solid #e5e7eb; margin-bottom: 30px;">
+
+    <h1 style="margin-top: 0; color: #111827;">{{ post.title }}</h1>
+    <div style="font-size: 0.9em; color: #6b7280; margin-bottom: 20px;">
+        Автор: <strong>{{ post.author.username }}</strong> | Опубликовано: {{ post.created_at|date:"d.m.Y H:i" }}
+    </div>
+    
+    <div style="font-size: 1.1em; color: #374151; line-height: 1.6; white-space: pre-wrap; margin-bottom: 25px;">
+        {{ post.content }}
+    </div>
+    
+        <!-- блок кнопок для автора поста или модератора -->
+    {% if user.is_authenticated %}
+        {% if post.author == user or user.profile.is_moderator %}
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <a href="{% url 'post:edit_post' post.id %}" style="background: #f59e0b; color: white; padding: 8px 16px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 0.9em;">Редактировать</a>
+                <a href="{% url 'post:delete_post' post.id %}" style="background: #ef4444; color: white; padding: 8px 16px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 0.9em;">Удалить</a>
+            </div>
+        {% endif %}
+    {% endif %}
+
+    {% if delete_confirm %}
+       <div style="margin-top: 20px; padding: 15px; background: #fef2f2; border: 1px solid #fca5a5; border-radius: 6px;">
+            <p style="color: #991b1b; font-weight: bold; margin-top: 0;">⚠️ Вы действительно хотите безвозвратно удалить этот пост?</p>
+            <form method="post" action="{% url 'post:delete_post' post.id %}">
+                {% csrf_token %}
+                <button type="submit" name="confirm_delete" style="background: #dc2626; color: white; padding: 8px 16px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Да, удалить</button>
+                <a href="{% url 'post:post_detail' post.id %}" style="margin-left: 10px; color: #4b5563; text-decoration: none;">Отмена</a>
+            </form>
+       </div> 
+    {% endif %}
+
+</article>
+
+<section style="background: #ffffff; padding: 25px; border-radius: 8px; border: 1px solid #e5e7eb;">
+    <h2 style="margin-top: 0; color: #111827;">Комментарии ({{ comments.count }})</h2>
+    
+    {% if user.is_authenticated %}
+        <form method="post" style="margin-bottom: 25px;">
+            {% csrf_token %}
+            <div style="margin-bottom: 15px;">
+                {{ form.text }}
+            </div>
+            <button type="submit" style="background: #3b82f6; color: white; padding: 8px 16px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">Отправить комментарий</button>
+        </form>
+    {% else %}
+        <p style="background: #f3f4f6; padding: 12px; border-radius: 6px; font-size: 0.95em; color: #4b5563;">
+            Войдите на сайт, чтобы оставить комментарий.
+        </p>
+    {% endif %}
+
+    <div style="display: flex; flex-direction: column; gap: 15px;">
+        {% if comments %}
+            {% for comment in comments %}
+                <div style="padding: 15px; background: #f9fafb; border-radius: 6px; border: 1px solid #f3f4f6;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span style="font-weight: bold; color: #111827;">{{ comment.author.username }}</span>
+                        <small style="color: #9ca3af;">{{ comment.created_at|date:"d.m.Y H:i" }}</small>
+                    </div>
+                    <p style="margin: 0; color: #374151; white-space: pre-wrap;">{{ comment.text }}</p>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p style="color: #9ca3af; font-style: italic; margin: 0;">Комментариев пока нет.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
