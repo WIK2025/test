@@ -1,0 +1,7 @@
+git init
+pip freeze > requirement.txt
+git add .
+git commit -m"chore: Initial project"
+git branch -M main
+git remote add origin <урл репо>
+git push -u origin main
