@@ -1,0 +1,31 @@
+{% extends 'post/base.html' %}
+{% block title %} {{ page_title }} {% endblock %}
+
+{% block content %}
+    <h1>Вход в личный кабинет</h1>
+    
+    <!-- Форма отправляет данные на обработку встроенному LoginView -->
+    <form method="post" novalidate>
+        <!-- Обязательный токен защиты от CSRF-атак -->
+        {% csrf_token %}
+        
+        <!-- Вывод сообщения об ошибке, если логин или пароль не подошли -->
+        {% if form.errors %}
+            <div style="color: red; margin-bottom: 15px;">
+                Неверное имя пользователя или пароль.
+            </div>
+        {% endif %}
+        
+        <!-- Выводим поля Username и Password -->
+        {{ form.as_p }}
+        
+        <button type="submit">
+            Войти
+        </button>
+    </form>
+
+    <p>
+        <!-- ИСПРАВЛЕНО: Теперь на странице входа ссылка ведет на регистрацию -->
+        Нет аккаунта? <a href="{% url 'userAcc:register' %}">Зарегистрироваться</a>
+    </p>
+{% endblock %}
