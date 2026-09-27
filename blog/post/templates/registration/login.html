@@ -1,0 +1,30 @@
+{% extends 'post/base.html' %}
+{% block title %} Вход в систему {% endblock %}
+
+{% block content %}
+    <div style="max-width: 450px; margin: 30px auto; padding: 20px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px;">
+        <h2 style="margin-top: 0; margin-bottom: 20px; text-align: center;">🔐 Вход в личный кабинет</h2>
+        
+        <form method="post" novalidate>
+            {% csrf_token %}
+            
+            {% if form.errors %}
+                <div style="color: #dc2626; margin-bottom: 15px; font-weight: 500; font-size: 0.9em;">
+                    ❌ Неверное имя пользователя или пароль. Попробуйте снова.
+                </div>
+            {% endif %}
+            
+            <div style="margin-bottom: 15px;">
+                {{ form.as_p }}
+            </div>
+            
+            <button type="submit" style="width: 100%; padding: 10px; background: #3b82f6; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">
+                Войти
+            </button>
+        </form>
+        
+        <p style="margin-top: 20px; text-align: center; font-size: 0.9em; color: #4b5563;">
+            Нет аккаунта? <a href="{% url 'userAcc:register' %}" style="color: #3b82f6; font-weight: bold; text-decoration: none;">Зарегистрироваться</a>
+        </p>
+    </div>
+{% endblock %}
