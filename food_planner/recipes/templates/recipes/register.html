@@ -1,0 +1,23 @@
+{% extends 'recipes/base.html' %}
+
+{% block title %} Регистрация FOOD-Planner {% endblock %}
+
+{% block content %}
+<article style="max-width: 500px; margin: 0 auto;">
+    <h2 style="text-align: center; margin-top: 0;">👤 Создание аккаунта</h2>
+    <p style="text-align: center; color: gray; font-size: 0.9em;">Зарегистрируйтесь, чтобы составить план питания</p>
+    
+    <form method="post" novalidate>
+        {% csrf_token %}
+        
+       
+        {{ form.as_p }}
+        
+        <button type="submit" style="width: 100%; margin-top: 10px;">Зарегистрироваться</button>
+    </form>
+    
+    <p style="text-align: center; margin-top: 15px; font-size: 0.95em;">
+        Уже есть профиль? <a href="{% url 'login' %}">Войти здесь</a>
+    </p>
+</article>
+{% endblock %}

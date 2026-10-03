@@ -1,0 +1,39 @@
+{% extends 'recipes/base.html' %}
+
+{% block content %}
+<div class="txt-center">
+    <h2>Каталог готовых рецептов</h2>
+    <p>Выберите рецепты, чтобы составить меню на неделю.</p>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 30px;">
+
+    {% if recipes %}
+        {% for recipe in recipes %}
+            <article style="display: flex; flex-direction: column; justify-content: space-between; margin: 0;">
+                <header style="padding: 0; overflow: hidden; border-radius: 8px 8px 0 0;">
+                    {% if recipe.image %}
+                        <img src="{{ recipe.image.url }}" alt="{{ recipe.title }}" style="width: 100%; height: 200px;
+                        object-fit: cover;">
+                    {% else %}
+                        <div style="width: 100%; height: 200px; background-color: #e5e7eb; display: flex;
+                        align-items: center; justify-content: center; color: #9ca3af;">🖼️ Нет обложки</div>
+                    {% endif %}
+                </header>
+                
+                <div style="padding: 15px 0;">
+                    <h3 style="margin-bottom: 5px;">{{ recipe.title }}</h3>
+                    <small style="color: #ff85a1; font-weight: bold;">⏱️ Время готовки: {{ recipe.cooking_time }} мин.</small>
+                </div>
+
+                <footer>
+                    <a href="{% url 'recipes:recipe_detail' recipe.id %}" class="button w-full" style="text-align: center;
+                    display: block;">Посмотреть рецепт</a>
+                </footer>
+            </article>
+        {% endfor %}
+    {% else %}
+        <p style="grid-column: 1/-1; text-align: center; color: #9ca3af;">База рецептов пока пуста. Добавьте Готовые Рецепты, Через Админа</p>
+    {% endif %}
+</div>
+{% endblock %}

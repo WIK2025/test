@@ -1,0 +1,31 @@
+{% extends 'recipes/base.html' %}
+{% block content %}
+<h2>🛒 Автоматически сформированный список покупок</h2>
+<p>Jбщий чек-лист.</p>
+
+<article>
+    {% if shopping_list %}
+        <ul style="list-style-type: none; padding-left: 0;">
+            {% for item in shopping_list %}
+                <li style="padding: 12px 0; border-bottom: 1px solid #e5e7eb;
+                display: flex; align-items: center; gap: 15px;">
+                    <input type="checkbox" id="item-{{ forloop.counter }}" style="margin: 0; 
+                    width: 20px; height: 20px; cursor: pointer;">
+                    <label for="item-{{ forloop.counter }}" style="margin: 0; font-size: 1.1em; cursor: pointer;">
+                        <strong>{{ item.ingredient__name }}</strong> — <ins style="color: #3b82f6;
+                        text-decoration: none; font-weight: bold;">{{ item.total_amount }} {{ item.ingredient__unit }}</ins>
+                    </label>
+                </li>
+            {% endfor %}
+        </ul>
+        <div style="margin-top: 25px; text-align: right;">
+            <small style="color: #9ca3af;">Распечатайте этот чек лист перед походом в магазин, или откройте на телефоне! 📝</small>
+        </div>
+    {% else %}
+        <div style="text-align: center; padding: 30px 0;">
+            <p style="color: #9ca3af;">Список покупок пуст, так как у вас нет запланированных блюд.</p>
+            <a href="{% url 'recipes:recipe_list' %}" class="button">Запланировать меню</a>
+        </div>
+    {% endif %}
+</article>
+{% endblock %}

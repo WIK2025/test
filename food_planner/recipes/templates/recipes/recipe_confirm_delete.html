@@ -1,0 +1,15 @@
+{% extends 'recipes/base.html' %}
+
+{% block content %}
+<article style="max-width: 500px; margin: 40px auto; text-align: center;">
+    <h2>🚨 Подтверждение удаления</h2>
+    <p>Вы действительно хотите удалить этот рецепт «<strong>{{ recipe.title }}</strong>» из кулинарного каталога?</p>
+    <p style="color: #dc2626; font-size: 0.9em; font-weight: bold;">Это действие отменить нельзя. Состав блюда так же будет стерт.</p>
+    
+    <form method="post" style="margin-top: 25px; display: flex; justify-content: center; gap: 15px;">
+        {% csrf_token %}
+        <button type="submit" style="background-color: #ef4444;">Да, удалить окончательно</button>
+        <a href="{% url 'recipes:recipe_detail' recipe.id %}" class="btn-link" style="background-color: #6b7280;">Отмена</a>
+    </form>
+</article>
+{% endblock %}

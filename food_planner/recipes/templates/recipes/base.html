@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ page_title|default:"Планировщик меню" }}{% endblock %}</title>
+    <!-- загружаем тег статики -->
+    {% load static %}
+    <!--  стили css -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+    <!-- main-nav сайта -->
+    <nav class="main-nav">
+        <div class="nav-logo">
+            <strong><a href="{% url 'recipes:recipe_list' %}">🍳 FoodPlanner</a></strong>
+        </div>
+        <ul class="nav-links">
+            <li><a href="{% url 'recipes:recipe_list' %}">Каталог</a></li>
+            {% if user.is_authenticated %}
+                <!-- меню авторизованного пользователя -->
+                <li><a href="{% url 'recipes:meal_plan_view' %}">📅 Мой план питания</a></li>
+                <li><a href="{% url 'recipes:shopping_list_view' %}">🛒 Список покупок</a></li>
+                <li><mark>👤 {{ user.username }}</mark></li>
+                <li>
+                    <form action="{% url 'logout' %}" method="post" style="display: inline; margin: 0; padding: 0;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-logout">Выйти</button>
+                    </form>
+                </td>
+            {% else %}
+                <!-- меню для гостя -->
+                <li><a href="{% url 'login' %}">Вход</a></li>
+                <li><a href="{% url 'recipes:register' %}">Регистрация</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <!-- основной контент -->
+    <div class="container">
+        <!-- блок всплывающих уведомлений -->
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'error' %}
+                    <div style="padding: 12px; margin-bottom: 20px; 
+                    border-radius: 6px; background-color: #fee2e2; color: #dc2626; font-weight: bold;">
+                        ⚠️ {{ message }}
+                    </div>
+                {% else %}
+                    <div style="padding: 12px; margin-bottom: 20px; border-radius: 6px;
+                    background-color: #dcfce7; color: #16a34a; font-weight: bold;">
+                        ✓ {{ message }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <div class="container" style="text-align: center; margin-top: 40px;
+    padding: 20px 0; border-top: 1px solid #e5e7eb; color: #6b7280;">
+        <small>&copy; Персональный планировщик питания </small>
+    </div>
+
+</body>
+</html>

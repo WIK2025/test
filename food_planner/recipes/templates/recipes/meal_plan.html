@@ -1,0 +1,33 @@
+{% extends 'recipes/base.html' %}
+{% block content %}
+<h2>📅 Персональный план питания на неделю</h2>
+<article>
+    {% if plans %}
+        <table class="striped">
+            <thead>
+                <tr>
+                    <th>Дата</th>
+                    <th>Прием пищи</th>
+                    <th>Выбранное блюдо</th>
+                    <th>Действие</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for plan in plans %}
+                    <tr>
+                        <td><strong>{{ plan.date|date:"d.m.Y" }}</strong></td>
+                        <td><mark>{{ plan.get_meal_type_display }}</mark></td>
+                        <td><a href="{% url 'recipes:recipe_detail' plan.recipe.id %}">{{ plan.recipe.title }}</a></td>
+                        <td><a href="{% url 'recipes:recipe_detail' plan.recipe.id %}" style="font-size: 0.85em;">Детали</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div style="text-align: center; padding: 30px 0;">
+            <p style="color: #9ca3af;">Календарь питания на эту неделю пока пуст.</p>
+            <a href="{% url 'recipes:recipe_list' %}" class="button">Выбрать блюда из каталога</a>
+        </div>
+    {% endif %}
+</article>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'recipes/base.html' %}
+
+{% block title %} Вход — NutriPlanner {% endblock %}
+
+{% block content %}
+<article style="max-width: 450px; margin: 0 auto;">
+    <h2 style="text-align: center; margin-top: 0;">🔐 Вход в систему</h2>
+    
+    <form method="post" novalidate>
+        {% csrf_token %}
+        
+        <!-- вывод ошибки, если пользователь ввел неверный пароль -->
+        {% if form.errors %}
+            <div style="padding: 10px; margin-bottom: 15px; border-radius: 4px;
+            background-color: #f8d7da; color: #842029; font-size: 0.9em;">
+                Неверное имя пользователя или пароль. Попробуйте еще раз.
+            </div>
+        {% endif %}
+        
+        <p>
+            <label for="id_username">Имя пользователя:</label>
+            <input type="text" name="username" autofocus required id="id_username" placeholder="Введите ваш логин">
+        </p>
+        
+        <p>
+            <label for="id_password">Пароль:</label>
+            <input type="password" name="password" required id="id_password" placeholder="Введите ваш пароль">
+        </p>
+        
+        <button type="submit" style="width: 100%; margin-top: 10px;">Войти</button>
+    </form>
+    
+    <p style="text-align: center; margin-top: 15px; font-size: 0.95em;">
+        Еще нет аккаунта? <a href="{% url 'recipes:register' %}">Создать профиль</a>
+    </p>
+</article>
+{% endblock %}
