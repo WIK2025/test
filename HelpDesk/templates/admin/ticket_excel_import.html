@@ -1,0 +1,39 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls static %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+    &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+    &rsaquo; <a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural }}</a>
+    &rsaquo; Импорт из Excel
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main" style="max-width: 700px; font-family: sans-serif;">
+    <h2>📊 Загрузка выгрузок из старой CRM системы</h2>
+    <p style="color: #666; line-height: 1.5; margin-bottom: 20px;">
+        Выберите подготовленный файл таблицы формата <strong>.xlsx</strong>.<br>
+        Система автоматически проверит e-mail клиентов, создаст недостающие контрагенты, обновит существующие заявки или зарегистрирует новые. Битые строки будут занесены в журнал логов.
+    </p>
+
+    <form method="post" enctype="multipart/form-data" style="background: #fff; padding: 25px; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+        {% csrf_token %}
+        
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; font-weight: bold; margin-bottom: 8px;">Файл выгрузки (.xlsx):</label>
+            <input type="file" name="excel_file" accept=".xlsx" required style="padding: 10px; border: 1px solid #ddd; border-radius: 4px; width: 100%; box-sizing: border-box; background: #f9fafb;">
+        </div>
+
+        <div style="display: flex; gap: 12px; align-items: center; margin-top: 25px;">
+            <button type="submit" style="background: #10b981; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 14px;">
+                🚀 Запустить импорт данных
+            </button>
+            <a href="{% url opts|admin_urlname:'changelist' %}" style="display: inline-block; padding: 9px 18px; color: #4b5563; text-decoration: none; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; background: #f9fafb; font-weight: 500;">
+                Отмена
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}
