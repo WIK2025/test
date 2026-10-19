@@ -1,0 +1,20 @@
+{% extends 'quiz/base.html' %}
+{% block content %}
+    <h1>Вопрос №{{ request.session.current_question_index|add:1 }}</h1>
+    <h2 style="color: #374151; font-size: 1.1em; margin-bottom: 20px;">{{ question_data.question }}</h2>
+    {% if error_message %}
+        <div class="error-msg">⚠️ {{ error_message }}</div>
+    {% endif %}
+    <form method="post" action="{% url 'quiz:quiz_question' %}">
+        {% csrf_token %}
+        <div style="margin-bottom: 20px;">
+            {% for option in question_data.options %}
+                <label class="option-label">
+                    <input type="radio" name="user_answer" value="{{ option }}">
+                    <span>{{ option }}</span>
+                </label>
+            {% endfor %}
+        </div>
+        <button type="submit" class="btn">Ответить</button>
+    </form>
+{% endblock %}

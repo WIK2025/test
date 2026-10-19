@@ -1,0 +1,11 @@
+{% extends 'quiz/base.html' %}
+{% block content %}
+    <h1>🏁 Результаты</h1>
+    <h2 style="text-align: center; color: #10b981; font-size: 1.3em; margin: 20px 0;">
+        Вы набрали {{ score }} из {{ total }} баллов!
+    </h2>
+    <form method="post" action="{% url 'quiz:quiz_result' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn" style="background-color: #10b981;">Пройти заново</button>
+    </form>
+{% endblock %}

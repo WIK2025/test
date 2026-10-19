@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{{ page_title }}{% endblock %}</title>
+    <style>
+        body { margin: 0; padding: 0; font-family: sans-serif; background-color: #f3f4f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .quiz-card { background: white; padding: 30px; width: 100%; max-width: 450px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e5e7eb; box-sizing: border-box; }
+        h1 { text-align: center; color: #111827; margin-top: 0; }
+        .btn { background-color: #3b82f6; color: white; padding: 12px; border-radius: 6px; border: none; cursor: pointer; font-weight: bold; width: 100%; font-size: 1em; }
+        .btn:hover { background-color: #2563eb; }
+        .option-label { display: flex; align-items: center; padding: 12px; margin-bottom: 10px; background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; cursor: pointer; }
+        .option-label input { margin-right: 12px; transform: scale(1.2); }
+        .error-msg { color: #ef4444; font-weight: bold; text-align: center; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <div class="quiz-card">
+        {% block content %} {% endblock %}
+    </div>
+</body>
+</html>

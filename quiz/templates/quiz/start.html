@@ -1,0 +1,11 @@
+{% extends 'quiz/base.html' %}
+{% block content %}
+    <h1>🧠 Тест по Django</h1>
+    <p style="color: #6b7280; text-align: center; line-height: 1.5; margin-bottom: 25px;">
+        Проверьте свои знания архитектуры веб-приложений и механизмов работы с сессиями!
+    </p>
+    <form method="post" action="{% url 'quiz:start_page' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn">Начать квиз</button>
+    </form>
+{% endblock %}
