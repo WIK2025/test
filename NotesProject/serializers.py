@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from .models import Note, Tag
+from django.contrib.auth.models import User
+from rest_framework import serializers
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
@@ -51,3 +53,17 @@ class NoteSerializer(serializers.ModelSerializer):
         instance.save()
         self._process_tags(instance, tag_ids=tag_ids, tag_names=tag_names)
         return instance
+class RegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password')
+
+    def create(self, validated_data):
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            email=validated_data.get('email', ''),
+            password=validated_data['password']
+        )
+        return user
